@@ -15,21 +15,29 @@ export default async function handler(req, res) {
                 break;
 
             case "POST":
+                // Validate body
+                if (!req.body.title || !req.body.description) {
+                    return res.status(400).json({ message: "Title and description are required" });
+                }
                 const newTask = await Task.create(req.body);
                 res.status(201).json(newTask);
                 break;
 
             case "PUT":
-                const updatedTask = await Task.findByIdAndUpdate(id, req.body, {
-                    new: true,
-                });
+                const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
+                if (!updatedTask) {
+                    return res.status(404).json({ message: "Task not found" });
+                }
                 res.status(200).json(updatedTask);
                 break;
 
             case "DELETE":
-                await Task.findByIdAndDelete(id);
+                const deletedTask = await Task.findByIdAndDelete(id);
+                if (!deletedTask) {
+                    return res.status(404).json({ message: "Task not found" });
+                }
                 res.status(204).send();
-                break; 
+                break;
 
             default:
                 res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
