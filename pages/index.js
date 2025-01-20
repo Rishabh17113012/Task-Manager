@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import "../app/globals.css";
-import { set } from 'mongoose';
+import Image from 'next/image'; // Import Next.js Image component
 
 export default function Home() {
     const [tasks, setTasks] = useState([]); // Array to store tasks
@@ -15,7 +15,7 @@ export default function Home() {
     }, []);
 
     const fetchTasks = async () => {
-        const res = await fetch('/api/tasks'); // We use this method to call API through desired routes, and store API response on res variable
+        const res = await fetch('/api/tasks');
         const data = await res.json();
         setTasks(data);
     };
@@ -56,12 +56,14 @@ export default function Home() {
         <div className='bg-slate-50'>
             <div className='grid grid-flow-col justify-between px-3 mb-4 pt-3'>
                 <div className='text-black'>
-                    <img src='/u3.jpg' width={60} className='rounded-full'></img>
+                    {/* Updated img tag to Image from next/image */}
+                    <Image src='/u3.jpg' alt='User Profile' width={60} height={60} className='rounded-full' />
                 </div>
                 <button className='text-white bg-black px-6 py-3 rounded-full text-2xl' onClick={() => setNewTaskMenu(true)}>
                     +
                 </button>
             </div>
+
             {newTaskMenu && (
                 <div className='fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-40'>
                     <div className='bg-white w-3/4 max-w-md mx-auto rounded-lg p-6 text-center space-y-3 space-x-2'>
@@ -130,6 +132,7 @@ export default function Home() {
                     Under Review
                 </button>
             </div>
+
             <ul className='grid'>
                 {filteredTasks.map((task) => (
                     <li key={task._id} data-status={task.status === "done" ? "done" : task.status === "under-review" ? "under-review" : "in-progress"}
@@ -156,9 +159,9 @@ export default function Home() {
 
                         {activeTask === task._id && (
                             <div className='fixed inset-0 bg-gray-100 bg-opacity-95 flex flex-col justify-center items-center p-4 z-20'>
-                                <div className='grid grid-flow-row space-y-2 text-base '>
+                                <div className='grid grid-flow-row space-y-2 text-base'>
                                     <button
-                                        className='bg-green-500 text-white px-4 py-2 rounded-full '
+                                        className='bg-green-500 text-white px-4 py-2 rounded-full'
                                         onClick={() => {
                                             toggleTask(task._id, "done");
                                             setActiveTask(null);
@@ -167,7 +170,7 @@ export default function Home() {
                                         Mark as Done
                                     </button>
                                     <button
-                                        className='bg-cyan-600 text-white px-4 py-2 rounded-full '
+                                        className='bg-cyan-600 text-white px-4 py-2 rounded-full'
                                         onClick={() => {
                                             toggleTask(task._id, "in-progress");
                                             setActiveTask(null);
@@ -176,7 +179,7 @@ export default function Home() {
                                         Mark as In-Progress
                                     </button>
                                     <button
-                                        className='bg-slate-400 text-white px-4 py-2 rounded-full '
+                                        className='bg-slate-400 text-white px-4 py-2 rounded-full'
                                         onClick={() => {
                                             toggleTask(task._id, "under-review");
                                             setActiveTask(null);
@@ -185,7 +188,7 @@ export default function Home() {
                                         Mark as Under-Review
                                     </button>
                                     <button
-                                        className='border-2 border-red-500 text-red-500 px-4 py-2 rounded-full '
+                                        className='border-2 border-red-500 text-red-500 px-4 py-2 rounded-full'
                                         onClick={() => {
                                             deleteTask(task._id);
                                             setActiveTask(null);
@@ -194,7 +197,7 @@ export default function Home() {
                                         Delete
                                     </button>
                                     <button
-                                        className='border-2 border-gray-500 text-gray-500 px-4 py-2 rounded-full '
+                                        className='border-2 border-gray-500 text-gray-500 px-4 py-2 rounded-full'
                                         onClick={() => {
                                             setActiveTask(null);
                                         }}
